@@ -136,3 +136,13 @@ This will create a file `RandoopTest.java`, which contains a test driver, and `R
 ### Coverage in Java
 
 [Emma](http://emma.sourceforge.net/intro.html) is a decent option to collect coverage information form a java program.
+
+
+# Errors
+
+> make: Entering directory `/home/vagrant/TestGeneration/node_modules/random-js/node_modules/microtime/build'
+  CXX(target) Release/obj.target/microtime/src/microtime.o
+make: g++: Command not found
+make: *** [Release/obj.target/microtime/src/microtime.o] Error 127
+
+Fix with installing g++ on your system, such as `apt-get install g++`
