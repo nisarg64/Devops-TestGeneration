@@ -8,14 +8,13 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": 
-  {
+  "devDependencies": {
     "esprima": "^1.2.3",
     "faker": "^2.1.2",
     "istanbul": "^0.3.5",
     "mock-fs": "^2.3.2",
     "mockfs": "^0.1.5",
-    "microtime": "^0.6.0",
+    "node-gyp": "^3.0.3",
     "random-js": "^1.0.5",
     "underscore": "^1.7.0"
   }
