@@ -165,6 +165,7 @@ function generateTestCases(filePath)
 			content += generateMockFsTestCases(!pathExists,!fileWithContent, !dirWithFiles, fileWithoutContent, funcName, fileArgs);
 			content += generateMockFsTestCases(!pathExists,!fileWithContent, dirWithFiles, !fileWithoutContent, funcName, fileArgs);
 			content += generateMockFsTestCases(pathExists,!fileWithContent, !dirWithFiles, !fileWithoutContent, funcName, fileArgs);
+			content += generateMockFsTestCases(!pathExists,fileWithContent, !dirWithFiles, !fileWithoutContent, funcName, fileArgs);
 			content += generateMockFsTestCases(!pathExists,!fileWithContent, !dirWithFiles, !fileWithoutContent, funcName, fileArgs);
 		}
 
@@ -286,7 +287,7 @@ function constraints(filePath)
 							new Constraint(
 							{
 								ident: child.left.name,
-								value: "\""+rightHand+"a"+"\"",
+								value: "\""+rightHand+"z"+"\"",
 								funcName: funcName,
 								kind: "integer",
 								operator : child.operator,
@@ -342,7 +343,7 @@ function constraints(filePath)
 						var rightValue = buf.substring(child.right.range[0], child.right.range[1]);
 						var rightHand = child.right.value;
 
-						var tempStr = "abc";
+						var tempStr = new Array(rightHand + 1).join(  );
 						functionConstraints[funcName].constraints.push( 
 							new Constraint(
 							{
@@ -353,12 +354,13 @@ function constraints(filePath)
 								operator : child.operator,
 								expression: expression
 							}));
-
+						
+						tempStr = new Array(rightHand + 11).join();
 						functionConstraints[funcName].constraints.push( 
 							new Constraint(
 							{
 								ident: child.left.callee.object.name,
-								value: "\""+String(tempStr.insertAt(rightHand+1, child.left.arguments[0].value))+"\"",
+								value: "\""+String(tempStr.insertAt(rightHand+10, child.left.arguments[0].value))+"\"",
 								funcName: funcName,
 								kind: "integer",
 								operator : child.operator,
@@ -445,6 +447,17 @@ function constraints(filePath)
 								operator : child.operator,
 								expression: expression
 							}));
+
+							functionConstraints[funcName].constraints.push( 
+							new Constraint(
+							{
+								ident: params[p],
+								value:  "'pathContent/file1'",
+								funcName: funcName,
+								kind: "fileWithoutContent",
+								operator : child.operator,
+								expression: expression
+							}));
 						}
 					}
 				}
@@ -452,6 +465,40 @@ function constraints(filePath)
 				if( child.type == "CallExpression" &&
 					 child.callee.property &&
 					 child.callee.property.name =="existsSync")
+				{
+					for( var p =0; p < params.length; p++ )
+					{
+						if( child.arguments[0].name == params[p] )
+						{
+							functionConstraints[funcName].constraints.push( 
+							new Constraint(
+							{
+								ident: params[p],
+								// A fake path to a file
+								value:  "'path/fileExists'",
+								funcName: funcName,
+								kind: "fileExists",
+								operator : child.operator,
+								expression: expression
+							}));
+							functionConstraints[funcName].constraints.push( 
+							new Constraint(
+							{
+								ident: params[p],
+								value:  "'pathContent/file1'",
+								funcName: funcName,
+								kind: "fileWithoutContent",
+								operator : child.operator,
+								expression: expression
+							}));
+							
+						}
+					}
+				}
+
+				if( child.type == "CallExpression" &&
+						 child.callee.property &&
+						 child.callee.property.name =="readdirSync")
 				{
 					for( var p =0; p < params.length; p++ )
 					{
@@ -477,28 +524,6 @@ function constraints(filePath)
 								value:  "'path/dirWithFiles'",
 								funcName: funcName,
 								kind: "dirWithFiles",
-								operator : child.operator,
-								expression: expression
-							}));
-						}
-					}
-				}
-
-				if( child.type == "CallExpression" &&
-						 child.callee.property &&
-						 child.callee.property.name =="readdirSync")
-				{
-					for( var p =0; p < params.length; p++ )
-					{
-						if( child.arguments[0].name == params[p] )
-						{
-							functionConstraints[funcName].constraints.push( 
-							new Constraint(
-							{
-								ident: params[p],
-								value:  "'pathContent/file1'",
-								funcName: funcName,
-								kind: "fileWithoutContent",
 								operator : child.operator,
 								expression: expression
 							}));
