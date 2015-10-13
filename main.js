@@ -149,7 +149,17 @@ function generateTestCases(filePath)
 		
 		if( pathExists || fileWithContent || dirWithFiles || fileWithoutContent)
 		{
-			var fileArgs = ['"path/fileExists"', '"pathContent/file1"'];
+
+			for( var c = 0; c < constraints.length; c++ )
+			{
+				var constraint = constraints[c];
+				if( params.hasOwnProperty( constraint.ident ) )
+				{
+					params[constraint.ident] = constraint.value;
+				}
+			}
+
+			var fileArgs = Object.keys(params).map(function(key){return params[key];});
 			content += generateMockFsTestCases(pathExists,fileWithContent, dirWithFiles, fileWithoutContent, funcName, fileArgs);
 			// Bonus...generate constraint variations test cases....
 			content += generateMockFsTestCases(!pathExists,fileWithContent, dirWithFiles, fileWithoutContent, funcName, fileArgs);
@@ -481,16 +491,6 @@ function constraints(filePath)
 								operator : child.operator,
 								expression: expression
 							}));
-							functionConstraints[funcName].constraints.push( 
-							new Constraint(
-							{
-								ident: params[p],
-								value:  "'pathContent/file1'",
-								funcName: funcName,
-								kind: "fileWithoutContent",
-								operator : child.operator,
-								expression: expression
-							}));
 							
 						}
 					}
@@ -512,18 +512,6 @@ function constraints(filePath)
 								value:  "'path/fileExists'",
 								funcName: funcName,
 								kind: "fileExists",
-								operator : child.operator,
-								expression: expression
-							}));
-
-							functionConstraints[funcName].constraints.push( 
-							new Constraint(
-							{
-								ident: params[p],
-								// A fake path to a file
-								value:  "'path/dirWithFiles'",
-								funcName: funcName,
-								kind: "dirWithFiles",
 								operator : child.operator,
 								expression: expression
 							}));
