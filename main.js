@@ -383,11 +383,10 @@ function constraints(filePath)
 
 						var randomNumber = "1234567";
 
-
 						functionConstraints[funcName].constraints.push( 
 								new Constraint(
 								{
-									ident: params,
+									ident: params[0],
 									value: "\""+randomNumber.insertAt(0, rightHand)+"\"",
 									funcName: funcName,
 									kind: "integer",
@@ -398,7 +397,7 @@ function constraints(filePath)
 						functionConstraints[funcName].constraints.push( 
 								new Constraint(
 								{
-									ident: params,
+									ident: params[0],
 									value: "\""+randomNumber.insertAt(4, rightHand)+"\"",
 									funcName: funcName,
 									kind: "integer",
