@@ -82,7 +82,7 @@ var mockFileLibrary =
 	}
 };
 
-/**/
+/*Function Refered from : http://cwestblog.com/2011/05/02/cartesian-product-of-multiple-arrays/*/
 function cartesianProductOf() {
     return _.reduce(arguments, function(a, b) {
         return _.flatten(_.map(a, function(x) {
